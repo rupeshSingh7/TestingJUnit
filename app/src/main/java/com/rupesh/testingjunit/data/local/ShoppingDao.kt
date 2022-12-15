@@ -41,10 +41,19 @@ interface ShoppingDao {
     suspend fun updateShoppintItem(vararg shoppingItem: ShoppingItem)
 
    //2)Query methods
-
+    /**
+     *
+     */
     @Query("select * from shopping_list")
     suspend fun  observeAllShoppingList(): LiveData<ShoppingItem>
 
     @Query("select SUM(amount * price) from shopping_list")
     suspend fun  observeTAbsloteTotalPrice(): LiveData<Float>
+
+    @Query("SELECT * FROM shopping_list WHERE price BETWEEN :min AND :max")
+    fun loadAllUsersBetweenAges(min: Int, max: Int): LiveData<ShoppingItem>
+
+    @Query("SELECT * FROM shopping_list WHERE name LIKE :search " +
+            "OR price LIKE :search")
+    fun findUserWithName(search: String): LiveData<ShoppingItem>
 }
