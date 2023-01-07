@@ -23,7 +23,10 @@ interface ShoppingDao {
      *  If the @Insert method have single parameter then return a Int value, which is the new rowId
      */
     @Insert
-    suspend fun insertShoppintIter(vararg shoppingItem: ShoppingItem)
+    suspend fun insertShoppintItem(vararg shoppingItem: ShoppingItem)
+
+    @Insert
+    suspend fun insertShoppintItem(shoppingItem: ShoppingItem)
 
     /**
      * Similarly to @Insert methods
@@ -35,8 +38,11 @@ interface ShoppingDao {
     suspend fun deleteShoppingItem(vararg shoppingItem: ShoppingItem)
 
     /** Similarly to @Delete methods
-     * return an int value indicating the number of rows that were updated successfully.
+     * return an int value indicating the number of rows that were deleted successfully.
      */
+    @Delete
+    suspend fun deleteShoppingItem(shoppingItem: ShoppingItem): Int
+
     @Update
     suspend fun updateShoppintItem(vararg shoppingItem: ShoppingItem)
 
@@ -45,10 +51,10 @@ interface ShoppingDao {
      *
      */
     @Query("select * from shopping_list")
-    suspend fun  observeAllShoppingList(): LiveData<ShoppingItem>
+    suspend fun  observeAllShoppingList(): List<ShoppingItem>
 
     @Query("select SUM(amount * price) from shopping_list")
-    suspend fun  observeTAbsloteTotalPrice(): LiveData<Float>
+    suspend fun  observeTAbsloteTotalPrice(): List<Float>
 
     @Query("SELECT * FROM shopping_list WHERE price BETWEEN :min AND :max")
     fun loadAllUsersBetweenAges(min: Int, max: Int): LiveData<ShoppingItem>
